@@ -75,10 +75,13 @@ def makerequest(app, stdout=sys.stdout, host=None, port=None):
 
     # set Zope3-style default skin so that the request is usable for
     # Zope3-style view look-ups
-    from zope.app.publication.browser import setDefaultSkin
-    setDefaultSkin(request)
-
-    return app.__of__(RequestContainer(REQUEST=request))
+    try:
+        from zope.app.publication.browser import setDefaultSkin
+    except ImportError:
+        logging.getLogger(__name__).warn(
+            "Very old version : Zope 3 views not tied to this request object")
+    else:
+        setDefaultSkin(request)
 
 
 def get_portal(app, portal_id):
