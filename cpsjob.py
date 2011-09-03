@@ -82,7 +82,7 @@ def makerequest(app, stdout=sys.stdout, host=None, port=None):
             "Very old version : Zope 3 views not tied to this request object")
     else:
         setDefaultSkin(request)
-
+    return app
 
 def get_portal(app, portal_id):
     app = makerequest(app)
@@ -97,7 +97,6 @@ def get_portal(app, portal_id):
         found = False
     else:
         found = True
-
     if not found or not isinstance(portal, CPSSite):
         raise RuntimeError("Not the id of a CPS portal : '%s'", portal_id)
 
