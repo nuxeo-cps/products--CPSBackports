@@ -1,0 +1,45 @@
+=================
+CPS JOBS Backport
+=================
+
+.. sectnum::    :depth: 4
+.. contents::   :depth: 4
+
+Quoting the documentation of the current CPSJob (TODO insert proper
+link to ``doc.cps-cms.org``, fix CPSUtil first) :
+
+ CPS jobs is a harness to launch python scripts ("jobs") against a CPS
+ portal. The jobs can invoke any API from the Zope/CMF/CPS stack
+ and run as registered users. It works either in monolithic or ZEO
+ setups.
+
+ For long-running scripts, it is highly preferable to external methods.
+
+Usage
+=====
+
+The usage is exactly the same as in CPS >= 3.5.1 (TODO: link to documentation)
+
+History
+=======
+
+CPS jobs appeared first in CPS 3.5.0, their API has changed in CPS
+3.5.1. 
+
+Available jobs
+==============
+
+CPSHousekeeping
+---------------
+
+``CPSBackports/jobs/housekeeping.py`` is a port of
+``CPSUtil/jobs/housekeeping.py``, that was first released with CPSUtil
+1.4.2 and CPS 3.5.1
+
+
+.. Emacs
+.. Local Variables:
+.. mode: rst
+.. End:
+.. Vim
+.. vim: set filetype=rst:
