@@ -352,10 +352,10 @@ def exec_args():
             transaction.commit()
             logger.warn("Successfully sent notifications for %s", portal_str)
 
-    if options.pack_zodb:
+    if getattr(options, 'pack_zodb', None):
         pack(portal, days=options.days)
 
-    if options.backup:
+    if getattr(options, 'backup', None):
         backupZodb(portal, options.backupdir_path,
                    not options.nocompress, options.backups_keep_count)
 
