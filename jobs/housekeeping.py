@@ -33,8 +33,13 @@ import logging
 logger = logging.getLogger("housekeeping")
 
 import transaction
-from ZODB.FileStorage.FileStorage import FileStorage
-from ZEO.ClientStorage import ClientStorage
+try:
+  from ZODB.FileStorage.FileStorage import FileStorage
+  from ZEO.ClientStorage import ClientStorage
+  HANDLE_ZODB = True
+except ImportError:
+  logger.info("Cannot handle ZODB packs in this version.")
+  HANDLE_ZODB = False
 
 from Products.CPSUtil import cpsjob
 
@@ -103,53 +108,54 @@ Example:
                       "to keep for each document. "
                       "Defaults to %s." % DEFAULT_HISTORY_DAYS)
 
-    parser.add_option('-P', '--pack-zodb',
-                      action='store_true',
-                      dest='pack_zodb',
-                      default=False,
-                      help="Pack the ZODB.")
+    if HANDLE_ZODB:
+        parser.add_option('-P', '--pack-zodb',
+                          action='store_true',
+                          dest='pack_zodb',
+                          default=False,
+                          help="Pack the ZODB.")
 
-    parser.add_option('-d', '--days',
-                      action='store',
-                      dest='days',
-                      type='float',
-                      metavar='NUMBER',
-                      default=DEFAULT_HISTORY_DAYS,
-                      help="Use NUMBER for the days to keep in history. "
-                      "Defaults to %s." % DEFAULT_HISTORY_DAYS)
+        parser.add_option('-d', '--days',
+                          action='store',
+                          dest='days',
+                          type='float',
+                          metavar='NUMBER',
+                          default=DEFAULT_HISTORY_DAYS,
+                           help="Use NUMBER for the days to keep in history. "
+                          "Defaults to %s." % DEFAULT_HISTORY_DAYS)
 
-    parser.add_option('-b', '--backup',
-                      action='store_true',
-                      dest='backup',
-                      default=False,
-                      help="Backup the ZODB that has just been packed "
-                      """using the "cp" command (FileStorage or ZEO only).
-                      Autodetects the file to backup.""")
+        parser.add_option('-b', '--backup',
+                          action='store_true',
+                          dest='backup',
+                          default=False,
+                          help="Backup the ZODB that has just been packed "
+                          """using the "cp" command (FileStorage or ZEO only).
+                          Autodetects the file to backup.""")
 
-    parser.add_option('-k', '--backupdir',
-                      action='store',
-                      dest='backupdir_path',
-                      type='string',
-                      metavar='FILE',
-                      default=DEFAULT_ZODB_BACKUP_DIR_PATH,
-                      help="The FILE path of the directory used for storing "
-                      "ZODB backups. "
-                      "The default is %s." % DEFAULT_ZODB_BACKUP_DIR_PATH)
+        parser.add_option('-k', '--backupdir',
+                          action='store',
+                          dest='backupdir_path',
+                          type='string',
+                          metavar='FILE',
+                          default=DEFAULT_ZODB_BACKUP_DIR_PATH,
+                          help="The FILE path of the directory used for storing "
+                          "ZODB backups. "
+                          "The default is %s." % DEFAULT_ZODB_BACKUP_DIR_PATH)
 
-    parser.add_option('--nocompress',
-                      action='store_true',
-                      dest='nocompress',
-                      default=False,
-                      help="Don't compress the ZODB backups.")
+        parser.add_option('--nocompress',
+                          action='store_true',
+                          dest='nocompress',
+                          default=False,
+                          help="Don't compress the ZODB backups.")
 
-    parser.add_option('-B', '--keep-backups-count',
-                      action='store',
-                      dest='backups_keep_count',
-                      type='int',
-                      metavar='NUMBER',
-                      default=DEFAULT_ZODB_BACKUPS_KEEP_COUNT,
-                      help="The NUMBER of ZODB backups to keep. "
-                      "The default is %s." % DEFAULT_ZODB_BACKUPS_KEEP_COUNT)
+        parser.add_option('-B', '--keep-backups-count',
+                          action='store',
+                          dest='backups_keep_count',
+                          type='int',
+                          metavar='NUMBER',
+                          default=DEFAULT_ZODB_BACKUPS_KEEP_COUNT,
+                          help="The NUMBER of ZODB backups to keep. "
+                          "The default is %s." % DEFAULT_ZODB_BACKUPS_KEEP_COUNT)
 
     parser.add_option('-s', '--send-notifications',
                       action='store',
