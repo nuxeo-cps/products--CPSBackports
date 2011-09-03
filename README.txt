@@ -2,7 +2,7 @@
 CPSBackports README
 ===================
 
-:Author: Georges Racinet <georges@racinet.fr>
+:Author: Georges Racinet <gracinet@cps-cms.org>
 
 
 Contents

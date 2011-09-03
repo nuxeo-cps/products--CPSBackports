@@ -5,7 +5,7 @@
 # M.-A. Darche <madarche@nuxeo.com>
 # Olivier Grisel <og@nuxeo.com>
 # Julien Anguenot <ja@nuxeo.com>
-# Georges Racinet <georges@racinet.fr>
+# Georges Racinet <gracinet@cps-cms.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as published
