@@ -86,7 +86,13 @@ def makerequest(app, stdout=sys.stdout, host=None, port=None):
 
 def get_portal(app, portal_id):
     app = makerequest(app)
-    from Products.CPSCore.portal import CPSSite
+    try:
+        from Products.CPSCore.portal import CPSSite
+        cls = CPSSite
+    except ImportError: # CPS < 3.4
+        from Products.CPSDefault.Portal import CPSDefaultSite
+        cls = CPSDefaultSite
+
     try:
         return getattr(app, portal_id)
     except AttributeError:
@@ -94,7 +100,7 @@ def get_portal(app, portal_id):
     else:
         found = True
 
-    if not found or not isinstance(portal, CPSSite):
+    if not found or not isinestance(portal, cls):
         raise RuntimeError("Not the id of a CPS portal : '%s'", portal_id)
 
 def login(portal, user_id, roles=('Manager', 'Member')):
