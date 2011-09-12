@@ -82,7 +82,8 @@ def makerequest(app, stdout=sys.stdout, host=None, port=None):
             "Very old version : Zope 3 views not tied to this request object")
     else:
         setDefaultSkin(request)
-    return app
+
+    return app.__of__(RequestContainer(REQUEST=request))
 
 def get_portal(app, portal_id):
     app = makerequest(app)
