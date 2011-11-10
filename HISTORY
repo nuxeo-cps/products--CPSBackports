@@ -1,4 +1,21 @@
 ===========================================================
+Package: CPSBackports 0.1.1
+===========================================================
+First release built by: gracinet at: 2011-11-10T08:43:31
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Acquisition of skins did not work
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: CPSBackports 0.1.0
 ===========================================================
 First release built by: gracinet at: 2011-09-03T16:55:35
