@@ -28,8 +28,7 @@ context external methods are normally launched in.
 import sys
 import os
 import logging
-
-import transaction
+from Products.CPSBackports.abstract import commit
 
 import optparse
 optparser = optparse.OptionParser(
@@ -172,7 +171,8 @@ def run(app, call, *args, **kwargs):
         import pdb
         pdb.post_mortem(sys.exc_info()[2])
     else:
-        transaction.commit()
+        commit()
+
 
 if __name__ == '__main__':
     parse_args() # what else could we do without the app object ?
