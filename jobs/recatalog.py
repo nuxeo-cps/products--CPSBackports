@@ -45,9 +45,21 @@ class Reindexer:
         else:
             self.dump_errors = False
 
-        self.pxtool = getToolByName(portal, 'portal_proxies')
         self.catalog = getToolByName(portal, 'portal_catalog')
-        self.total_proxies = len(self.pxtool._rpath_to_infos)
+        self.init_rpaths(getattr(options, 'reindex_under', ''))
+
+    def init_rpaths(self, under_rpath):
+        """Initialize the BTreeItems set of rpaths."""
+
+        self.pxtool = getToolByName(self.portal, 'portal_proxies')
+        btree = self.pxtool._rpath_to_infos
+        if not under_rpath:
+            keys = btree.keys()
+        else:
+            keys = btree.keys(under_rpath + '/', under_rpath + '/\xFF')
+
+        self.total_proxies = len(keys)
+        self.rpaths = keys
 
     def log_progress(self, done):
         now = DateTime()
@@ -57,7 +69,7 @@ class Reindexer:
         logger.info("Reindexed %d over %d (%2d%%) in %d minutes "
                     "(ETA %d minutes)",
                     done, total, (100*done)/total,
-                    elapsed_mn, total*elapsed_mn/done)
+                    elapsed_mn, (total-done)*elapsed_mn/done)
 
     def log_faulty(self, rpath, reason=''):
         if not self.dump_errors:
@@ -73,7 +85,7 @@ class Reindexer:
         self.start_time = DateTime()
         current_batch = []
 
-        for i, rpath in enumerate(self.pxtool._rpath_to_infos.keys()):
+        for i, rpath in enumerate(self.rpaths):
             proxy = self.portal.unrestrictedTraverse(rpath, None)
 
             if proxy is None:
@@ -112,8 +124,6 @@ def job(portal, args, options):
 # invocation through zopectl run
 if __name__ == '__main__':
     optparser = cpsjob.optparser
-    optparser.add_option('--index-from',
-                         help="Relative path to index from")
     optparser.add_option('--commit-every',
                          default=10,
                          help="Number of proxies to perform commit.")
@@ -125,6 +135,9 @@ if __name__ == '__main__':
                          help="If specified, will reindex proxies from "
                          "that input file. CSV format is assumed, with "
                          "first column being the relative path from portal")
+    optparser.add_option('--reindex-under',
+                         help="If specified, will reindex proxies strictly "
+                         "under that path only")
 
     cpsjob.run(app, job)
 
