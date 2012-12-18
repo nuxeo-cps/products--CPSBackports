@@ -56,6 +56,7 @@ class Reindexer:
         if not under_rpath:
             keys = btree.keys()
         else:
+            under_rpath = under_rpath.strip('/')
             keys = btree.keys(under_rpath + '/', under_rpath + '/\xFF')
 
         self.total_proxies = len(keys)
@@ -134,10 +135,11 @@ if __name__ == '__main__':
     optparser.add_option('--input-file',
                          help="If specified, will reindex proxies from "
                          "that input file. CSV format is assumed, with "
-                         "first column being the relative path from portal")
+                         "first column being the relative path from portal, "
+                         "in particular error files from previous runs")
     optparser.add_option('--reindex-under',
                          help="If specified, will reindex proxies strictly "
-                         "under that path only")
+                         "under that path (relative from portal) only")
 
     cpsjob.run(app, job)
 
